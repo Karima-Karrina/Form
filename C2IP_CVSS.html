@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CVSS, Common Vulnerability Scoring System Version</title>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+		    background-image: url('https://lamininsolutions.com/wp-content/uploads/2022/07/bigstock-Concept-Of-Cyber-Security-Inf-454218757.jpg');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-color: rgba(255, 255, 255, 0.8); /* surcouche sur image */
+			
+	    }
+        
+        .container {
+			max-width: 800px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+			/*background-image: url('https://navvia.com/hs-fs/hubfs/MKTG%20Folder/Miscellaneous%20Images%20-%20Multiple%20content/IT%20Security%20blog%201.png?width=362&height=362&name=IT%20Security%20blog%201.png');*/
+        }
+        
+        .header {
+            background: #0078d4;
+            color: #0078d4;
+            padding: 30px;
+			font-weight: bold;
+            text-align: center;
+			background-color: rgba(240, 240, 240, 0.9);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 10px;
+			font-weight: bold;
+        }
+        
+        .required-note {
+            background: #f3f2f1;
+            padding: 10px 20px;
+            border-left: 4px;
+            font-size: 14px;
+            color: #323130;
+        }
+        
+        .score-section {
+			background-color: rgba(255, 255, 255, 0.8); /* surcouche sur image */
+            padding: 20px 30px;
+            border-bottom: 1px solid #e1e1e1;
+			font-size: 14px;
+			color: #323130;
+        }
+        
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .score-card {
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e1e1e1;
+            text-align: center;
+        }
+        
+        .score-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .score-label {
+            font-size: 18px;
+            color: #0078d4;
+            margin-bottom: 5px;
+			font-weight: bold;
+
+        }
+        
+        .score-severity {
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 14px;
+            font-weight: 500;
+			
+        }
+        
+        .severity-none { background: #f3f2f1; color: #605e5c; }
+        .severity-low { background: #d4edda; color: #155724; }
+        .severity-medium { background: #fff3cd; color: #856404; }
+        .severity-high { background: #f8d7da; color: #721c24; }
+        .severity-critical { background: #f5c6cb; color: #491217; }
+        
+        .form-section {
+			background-color: rgba(240, 240, 240, 0.9);
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #323130;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0078d4;
+        }
+        
+        .question-group {
+            margin-bottom: 25px;
+        }
+        
+        .question-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #323130;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .required {
+            color: #a4262c;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .radio-option:hover {
+            background-color: #f3f2f1;
+        }
+        
+        .radio-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            accent-color: #0078d4;
+        }
+        
+        .radio-option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 14px;
+            color: #323130;
+        }
+        
+        .cvss-vector {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-top: 1px solid #0078d4;
+			font-size: 14px;
+			color: #323130;
+        }
+        
+        .cvss-vector h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #323130;
+            margin-bottom: 10px;
+			
+        }
+        
+        .vector-display {
+            background-color: rgba(240, 240, 240, 0.9);
+            padding: 15px;
+            border: 1px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin-bottom: 10px;
+        }
+        
+        .copy-button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .copy-button:hover {
+            background: #106ebe;
+        }
+    
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.form-cell {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.tab-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.tab-button {
+  padding: 8px 16px;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+.tab-button.active {
+  background-color: #ccc;
+  border-bottom: 2px solid #000;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .tab-nav {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>CVSS,Common Vulnerability Scoring System</h1>
+</div>
+<div class="score-section">
+<h2 style="margin-bottom: 10px; color: #323130;">Scores CVSS v3.1</h2>
+<div class="scores-grid">
+<div class="score-card" id="base-score">
+<div class="score-value" id="base-value">0.0</div>
+<div class="score-label">Score de Base</div>
+<div class="score-severity" id="base-severity">None</div>
+</div>
+<div class="score-card" id="temporal-score">
+<div class="score-value" id="temporal-value">0.0</div>
+<div class="score-label">Score Temporel</div>
+<div class="score-severity" id="temporal-severity">None</div>
+</div>
+<div class="score-card" id="environmental-score">
+<div class="score-value" id="environmental-value">0.0</div>
+<div class="score-label">Score Environnemental</div>
+<div class="score-severity" id="environmental-severity">None</div>
+</div>
+</div>
+</div>
+<div class="tab-nav"><button class="tab-button" onclick="showTab('base')">Paramètres de Base</button><button class="tab-button" onclick="showTab('temporel')">Paramètres Temporels</button><button class="tab-button" onclick="showTab('environnement')">Paramètres Environnementaux</button></div><div class="form-section tab-content" id="base">
+<div class="section-title">Paramètres de Base (1-8)</div>
+<div class="question-group">
+<label class="question-label">Vecteur d'Attaque (AV) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="av-network" name="AV" type="radio" value="N"/>
+<label for="av-network">Réseau</label>
+</div>
+<div class="radio-option">
+<input id="av-adjacent" name="AV" type="radio" value="A"/>
+<label for="av-adjacent">Adjacent</label>
+</div>
+<div class="radio-option">
+<input id="av-local" name="AV" type="radio" value="L"/>
+<label for="av-local">Local</label>
+</div>
+<div class="radio-option">
+<input id="av-physical" name="AV" type="radio" value="P"/>
+<label for="av-physical">Physique</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Complexité d'attaque (AC) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="ac-low" name="AC" type="radio" value="L"/>
+<label for="ac-low">Bas</label>
+</div>
+<div class="radio-option">
+<input id="ac-high" name="AC" type="radio" value="H"/>
+<label for="ac-high">Haut</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Privilèges requis (PR) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="pr-none" name="PR" type="radio" value="N"/>
+<label for="pr-none">Aucun</label>
+</div>
+<div class="radio-option">
+<input id="pr-low" name="PR" type="radio" value="L"/>
+<label for="pr-low">Bas</label>
+</div>
+<div class="radio-option">
+<input id="pr-high" name="PR" type="radio" value="H"/>
+<label for="pr-high">Haut</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Interaction utilisateur (UI) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="ui-none" name="UI" type="radio" value="N"/>
+<label for="ui-none">Aucune</label>
+</div>
+<div class="radio-option">
+<input id="ui-required" name="UI" type="radio" value="R"/>
+<label for="ui-required">Obligatoire</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Portée (S) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="s-unchanged" name="S" type="radio" value="U"/>
+<label for="s-unchanged">Inchangé</label>
+</div>
+<div class="radio-option">
+<input id="s-changed" name="S" type="radio" value="C"/>
+<label for="s-changed">Modifié</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Confidentialité (C) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="c-none" name="C" type="radio" value="N"/>
+<label for="c-none">Aucun</label>
+</div>
+<div class="radio-option">
+<input id="c-low" name="C" type="radio" value="L"/>
+<label for="c-low">Bas</label>
+</div>
+<div class="radio-option">
+<input id="c-high" name="C" type="radio" value="H"/>
+<label for="c-high">Haut</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Intégrité (I) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="i-none" name="I" type="radio" value="N"/>
+<label for="i-none">Aucun</label>
+</div>
+<div class="radio-option">
+<input id="i-low" name="I" type="radio" value="L"/>
+<label for="i-low">Bas</label>
+</div>
+<div class="radio-option">
+<input id="i-high" name="I" type="radio" value="H"/>
+<label for="i-high">Haut</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Disponibilité (A) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="a-none" name="A" type="radio" value="N"/>
+<label for="a-none">Aucun</label>
+</div>
+<div class="radio-option">
+<input id="a-low" name="A" type="radio" value="L"/>
+<label for="a-low">Bas</label>
+</div>
+<div class="radio-option">
+<input id="a-high" name="A" type="radio" value="H"/>
+<label for="a-high">Haut</label>
+</div>
+</div>
+</div>
+</div>
+<div class="form-section tab-content" id="temporel" style="display:none;">
+<div class="section-title">Paramètres Temporels (9-11)</div>
+<div class="question-group">
+<label class="question-label">Maturité du code d'exploitation (E) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="e-not-defined" name="E" type="radio" value="X"/>
+<label for="e-not-defined">Non défini</label>
+</div>
+<div class="radio-option">
+<input id="e-unproven" name="E" type="radio" value="U"/>
+<label for="e-unproven">Non approuvé</label>
+</div>
+<div class="radio-option">
+<input id="e-poc" name="E" type="radio" value="P"/>
+<label for="e-poc">Preuve de concept</label>
+</div>
+<div class="radio-option">
+<input id="e-functional" name="E" type="radio" value="F"/>
+<label for="e-functional">Fonctionnel</label>
+</div>
+<div class="radio-option">
+<input id="e-high" name="E" type="radio" value="H"/>
+<label for="e-high">Haut</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Niveau de remédiation (RL) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="rl-not-defined" name="RL" type="radio" value="X"/>
+<label for="rl-not-defined">Non défini</label>
+</div>
+<div class="radio-option">
+<input id="rl-official" name="RL" type="radio" value="O"/>
+<label for="rl-official">Correction officielle</label>
+</div>
+<div class="radio-option">
+<input id="rl-temporary" name="RL" type="radio" value="T"/>
+<label for="rl-temporary">Correction temporaire</label>
+</div>
+<div class="radio-option">
+<input id="rl-workaround" name="RL" type="radio" value="W"/>
+<label for="rl-workaround">Solution de contournement</label>
+</div>
+<div class="radio-option">
+<input id="rl-unavailable" name="RL" type="radio" value="U"/>
+<label for="rl-unavailable">Indisponible</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Rapport de confiance (RC) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="rc-not-defined" name="RC" type="radio" value="X"/>
+<label for="rc-not-defined">Non définie</label>
+</div>
+<div class="radio-option">
+<input id="rc-unknown" name="RC" type="radio" value="U"/>
+<label for="rc-unknown">Inconnu</label>
+</div>
+<div class="radio-option">
+<input id="rc-reasonable" name="RC" type="radio" value="R"/>
+<label for="rc-reasonable">Raisonnable</label>
+</div>
+<div class="radio-option">
+<input id="rc-confirmed" name="RC" type="radio" value="C"/>
+<label for="rc-confirmed">Confirmé</label>
+</div>
+</div>
+</div>
+</div>
+<div class="form-section tab-content" id="environnement" style="display:none;">
+<div class="section-title">Paramètres Environnementaux</div>
+<div class="question-group">
+<label class="question-label">Exigence de confidentialité (CR) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="cr-not-defined" name="CR" type="radio" value="X"/>
+<label for="cr-not-defined">Non définie</label>
+</div>
+<div class="radio-option">
+<input id="cr-low" name="CR" type="radio" value="L"/>
+<label for="cr-low">Bas</label>
+</div>
+<div class="radio-option">
+<input id="cr-medium" name="CR" type="radio" value="M"/>
+<label for="cr-medium">Moyen</label>
+</div>
+<div class="radio-option">
+<input id="cr-high" name="CR" type="radio" value="H"/>
+<label for="cr-high">Haut</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Exigence d'intégrité (IR) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="ir-not-defined" name="IR" type="radio" value="X"/>
+<label for="ir-not-defined">Non définie</label>
+</div>
+<div class="radio-option">
+<input id="ir-low" name="IR" type="radio" value="L"/>
+<label for="ir-low">Bas</label>
+</div>
+<div class="radio-option">
+<input id="ir-medium" name="IR" type="radio" value="M"/>
+<label for="ir-medium">Moyen</label>
+</div>
+<div class="radio-option">
+<input id="ir-high" name="IR" type="radio" value="H"/>
+<label for="ir-high">Haut</label>
+</div>
+</div>
+</div>
+<div class="question-group">
+<label class="question-label">Exigence de disponibilité (AR) <span class="required">*</span></label>
+<div class="radio-group">
+<div class="radio-option">
+<input checked="" id="ar-not-defined" name="AR" type="radio" value="X"/>
+<label for="ar-not-defined">Non définie</label>
+</div>
+<div class="radio-option">
+<input id="ar-low" name="AR" type="radio" value="L"/>
+<label for="ar-low">Bas</label>
+</div>
+<div class="radio-option">
+<input id="ar-medium" name="AR" type="radio" value="M"/>
+<label for="ar-medium">Moyen</label>
+</div>
+<div class="radio-option">
+<input id="ar-high" name="AR" type="radio" value="H"/>
+<label for="ar-high">Haut</label>
+</div>
+</div>
+</div>
+</div>
+<div class="required-note">
+<strong>* Obligatoire</strong>
+</div>
+<div class="cvss-vector">
+<h3>Vecteur CVSS v3.1</h3>
+<div class="vector-display" id="cvss-vector">
+                CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N/E:X/RL:X/RC:X/CR:X/IR:X/AR:X
+            </div>
+<button class="copy-button" onclick="copyVector()">Copier le vecteur</button>
+</div>
+</div>
+<script>
+        // Valeurs CVSS v3.1
+        const values = {
+            AV: { N: 0.85, A: 0.62, L: 0.55, P: 0.2 },
+            AC: { L: 0.77, H: 0.44 },
+            PR: { N: 0.85, L: 0.62, H: 0.27, LS: 0.68, HS: 0.5 },
+            UI: { N: 0.85, R: 0.62 },
+            C: { H: 0.56, L: 0.22, N: 0 },
+            I: { H: 0.56, L: 0.22, N: 0 },
+            A: { H: 0.56, L: 0.22, N: 0 },
+            E: { X: 1, U: 0.91, P: 0.94, F: 0.97, H: 1 },
+            RL: { X: 1, O: 0.95, T: 0.96, W: 0.97, U: 1 },
+            RC: { X: 1, U: 0.92, R: 0.96, C: 1 },
+            CR: { X: 1, L: 0.5, M: 1, H: 1.5 },
+            IR: { X: 1, L: 0.5, M: 1, H: 1.5 },
+            AR: { X: 1, L: 0.5, M: 1, H: 1.5 }
+        };
+
+        function getSeverityLevel(score) {
+            if (score === 0) return { level: 'None', class: 'severity-none' };
+            if (score <= 3.9) return { level: 'Low', class: 'severity-low' };
+            if (score <= 6.9) return { level: 'Medium', class: 'severity-medium' };
+            if (score <= 8.9) return { level: 'High', class: 'severity-high' };
+            return { level: 'Critical', class: 'severity-critical' };
+        }
+
+        function getSelectedValue(name) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            return selected ? selected.value : '';
+        }
+
+        function calculateBaseScore() {
+            const av = values.AV[getSelectedValue('AV')];
+            const ac = values.AC[getSelectedValue('AC')];
+            let pr = values.PR[getSelectedValue('PR')];
+            const scope = getSelectedValue('S');
+            
+            // Ajustement PR selon le Scope
+            if (scope === 'C') {
+                if (getSelectedValue('PR') === 'L') pr = values.PR.LS;
+                if (getSelectedValue('PR') === 'H') pr = values.PR.HS;
+            }
+            
+            const ui = values.UI[getSelectedValue('UI')];
+            const c = values.C[getSelectedValue('C')];
+            const i = values.I[getSelectedValue('I')];
+            const a = values.A[getSelectedValue('A')];
+
+            const exploitability = 8.22 * av * ac * pr * ui;
+            const impact = 1 - ((1 - c) * (1 - i) * (1 - a));
+            
+            let baseScore;
+            if (scope === 'U') {
+                baseScore = Math.min(exploitability + impact, 10);
+            } else {
+                baseScore = Math.min(1.08 * (exploitability + impact), 10);
+            }
+
+            if (impact <= 0) baseScore = 0;
+            
+            return Math.ceil(baseScore * 10) / 10;
+        }
+
+        function calculateTemporalScore(baseScore) {
+            const e = values.E[getSelectedValue('E')];
+            const rl = values.RL[getSelectedValue('RL')];
+            const rc = values.RC[getSelectedValue('RC')];
+            
+            const temporalScore = baseScore * e * rl * rc;
+            return Math.ceil(temporalScore * 10) / 10;
+        }
+
+        function updateScores() {
+            const baseScore = calculateBaseScore();
+            const temporalScore = calculateTemporalScore(baseScore);
+            const environmentalScore = temporalScore; // Simplifié
+
+            // Mise à jour des affichages
+            updateScoreDisplay('base', baseScore);
+            updateScoreDisplay('temporal', temporalScore);
+            updateScoreDisplay('environmental', environmentalScore);
+
+            // Mise à jour du vecteur CVSS
+            updateCVSSVector();
+        }
+
+        function updateScoreDisplay(type, score) {
+            const severity = getSeverityLevel(score);
+            const valueDiv = document.getElementById(`${type}-value`);
+            const severityDiv = document.getElementById(`${type}-severity`);
+
+            valueDiv.textContent = score.toFixed(1);
+            severityDiv.textContent = severity.level;
+            severityDiv.className = `score-severity ${severity.class}`;
+        }
+
+        function updateCVSSVector() {
+            const vector = `CVSS:3.1/AV:${getSelectedValue('AV')}/AC:${getSelectedValue('AC')}/PR:${getSelectedValue('PR')}/UI:${getSelectedValue('UI')}/S:${getSelectedValue('S')}/C:${getSelectedValue('C')}/I:${getSelectedValue('I')}/A:${getSelectedValue('A')}/E:${getSelectedValue('E')}/RL:${getSelectedValue('RL')}/RC:${getSelectedValue('RC')}/CR:${getSelectedValue('CR')}/IR:${getSelectedValue('IR')}/AR:${getSelectedValue('AR')}`;
+            document.getElementById('cvss-vector').textContent = vector;
+        }
+
+        function copyVector() {
+            const vector = document.getElementById('cvss-vector').textContent;
+            navigator.clipboard.writeText(vector).then(() => {
+                alert('Vecteur CVSS copié dans le presse-papiers !');
+            });
+        }
+
+        // Ajout des événements sur tous les radio buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.addEventListener('change', updateScores);
+            });
+            
+            // Calcul initial
+            updateScores();
+        });
+    </script>
+<script>
+function showTab(id) {
+  const sections = document.querySelectorAll('.tab-content');
+  sections.forEach(sec => sec.style.display = 'none');
+
+  const buttons = document.querySelectorAll('.tab-button');
+  buttons.forEach(btn => btn.classList.remove('active'));
+
+  document.getElementById(id).style.display = 'block';
+  event.target.classList.add('active');
+}
+</script></body>
+</html>
